@@ -45,7 +45,7 @@ def annealing_prob(diff, temperature):
 
 
 def main():
-    neighbor_range = 0.5
+    neighbor_range = 0.25
     val_range = (0, 5)
 
     current_x = (random.random()*val_range[1])-val_range[0]
@@ -62,18 +62,25 @@ def main():
             next_x_2 = get_random_in_range(current_x_2, current_x_2_range)
 
             current_val = func(current_x, current_x_2)
-            print(f"{current_x}, {current_x_2}| {current_val}")
             next_val = func(next_x, next_x_2)
-
             if next_val < current_val:
                 current_x = next_x
                 current_x_2 = next_x_2
+                print(f"f({current_x:.2f}, {current_x_2:.2f}) = {current_val:.2f} < f({next_x:.2f}, {next_x_2:.2f}) = "
+                      f"{next_val:.2f}. Assign x1, x2 -> n1, n2")
             else:
                 if annealing_prob(next_val - current_val, temperature):
                     current_x = next_x
                     current_x_2 = next_x_2
-    return (current_x, current_x_2)
+                    print(
+                        f"f({current_x:.2f}, {current_x_2:.2f}) = {current_val:.2f} < f({next_x:.2f}, {next_x_2:.2f}) ="
+                        f" {next_val:.2f}. But assign x1, x2 -> n1, n2")
+                else:
+                    print(
+                        f"f({current_x:.2f}, {current_x_2:.2f}) = {current_val:.2f} < f({next_x:.2f}, {next_x_2:.2f}) ="
+                        f" {next_val:.2f}. Don't Assign x1, x2 -> n1, n2")
+    return current_x, current_x_2
 
 
 vals = main()
-print(func(vals[0], vals[1]))
+print(f"{vals} | {func(vals[0], vals[1])}")
